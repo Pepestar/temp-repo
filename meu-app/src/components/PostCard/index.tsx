@@ -1,11 +1,13 @@
 import "./styles.css";
 
-export const PostCard = ({ title, body, id, cover }) => {
-  //ou posso fazer.. const post = props.post
-  // ou posso fazer com destructuring.. const {post} = props
-  // ou posso fazer destructuring direto na props, assim como estou fazendo logo acima na linha 1
-  // ou passar as propriedades de uma vez assim como title, body, id, cover
+type PostCardProps = {
+  title: string;
+  body: string;
+  id: number;
+  cover: string;
+};
 
+export const PostCard: React.FC<PostCardProps> = ({ title, body, cover }) => {
   return (
     <div className="post">
       <img src={cover} alt={title} />

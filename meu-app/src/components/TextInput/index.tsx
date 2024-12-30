@@ -1,6 +1,11 @@
 import "./styles.css";
 
-export const TextInput = ({ searchValue, handleChange }) => {
+interface TextInputProps {
+  searchValue: string;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export const TextInput: React.FC<TextInputProps> = ({ searchValue, handleChange }) => {
   return (
     <input
       className="text-input"

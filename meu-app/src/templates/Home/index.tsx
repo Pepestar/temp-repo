@@ -5,8 +5,24 @@ import { Posts } from "../../components/Posts";
 import { Button } from "../../components/Button";
 import { TextInput } from "../../components/TextInput";
 
-export class Home extends Component {
-  state = {
+// Define o tipo Post corretamente, incluindo a propriedade 'cover'
+interface Post {
+  id: number;
+  title: string;
+  body: string;
+  cover: string; // A propriedade 'cover' foi corrigida
+}
+
+interface HomeState {
+  posts: Post[];
+  allPosts: Post[];
+  page: number;
+  postPerPage: number;
+  searchValue: string;
+}
+
+export class Home extends Component<object, HomeState> {
+  state: HomeState = {
     posts: [],
     allPosts: [],
     page: 0,
@@ -14,20 +30,20 @@ export class Home extends Component {
     searchValue: "",
   };
 
-  async componentDidMount(): any {
+  async componentDidMount(): Promise<void> {
     await this.loadPosts();
   }
 
-  loadPosts = async () => {
+  loadPosts = async (): Promise<void> => {
     const { page, postPerPage } = this.state;
-    const postsAndPhotos = await loadPosts();
+    const postsAndPhotos = await loadPosts(); // Espera-se um array de Post
     this.setState({
       posts: postsAndPhotos.slice(page, postPerPage),
       allPosts: postsAndPhotos,
     });
   };
 
-  loadMorePosts = () => {
+  loadMorePosts = (): void => {
     const { page, postPerPage, allPosts, posts } = this.state;
     const nextPage = page + postPerPage;
     const nextPosts = allPosts.slice(nextPage, nextPage + postPerPage);
@@ -35,7 +51,7 @@ export class Home extends Component {
     this.setState({ posts, page: nextPage });
   };
 
-  handleChange = (e) => {
+  handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = e.target;
     this.setState({ searchValue: value });
   };
@@ -44,14 +60,15 @@ export class Home extends Component {
     const { posts, page, postPerPage, allPosts, searchValue } = this.state;
     const noMorePosts = page + postPerPage >= allPosts.length;
 
-    const filteredPosts = !!searchValue
+    const filteredPosts = searchValue
       ? allPosts.filter((post) => {
           return post.title.toLowerCase().includes(searchValue.toLowerCase());
         })
       : posts;
+
     return (
       <section className="container">
-        <div class="search-container">
+        <div className="search-container">
           {!!searchValue && (
             <>
               <h1>Search value: {searchValue}</h1>
